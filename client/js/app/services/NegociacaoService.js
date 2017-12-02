@@ -1,62 +1,69 @@
 class NegociacaoService{
 
-    obterNegociacoesDaSemana(cb){
+    obterNegociacoesDaSemana(){
 
-        let xhr = new XMLHttpRequest();
-        xhr.open('GET', 'negociacoes/semana');
+        return new Promise((resolve, reject) => {
+            let xhr = new XMLHttpRequest();
+            xhr.open('GET', 'negociacoes/semana');
 
-        xhr.onreadystatechange = () => {
+            xhr.onreadystatechange = () => {
 
-            if (xhr.readyState == 4) {
-                if (xhr.status == 200) {
-                   cb(null, JSON.parse(xhr.responseText)
-                        .map(objeto => new Negociacao(new Date(objeto.data), objeto.quantidade, objeto.valor)));
-                } else {
-                    console.log(xhr.responseText);
-                    cb('Erro ao Importar Negociações', null);
+                if (xhr.readyState == 4) {
+                    if (xhr.status == 200) {
+                        resolve(JSON.parse(xhr.responseText)
+                            .map(objeto => new Negociacao(new Date(objeto.data), objeto.quantidade, objeto.valor)));
+                    } else {
+                        console.log(xhr.responseText);
+                        reject('Erro ao Importar Negociações da semana atual!');
+                    }
                 }
-            }
-        };
-        xhr.send();
+            };
+            xhr.send();
+        });
+
     }
 
-    obterNegociacoesDaSemanaAnterior(cb){
+    obterNegociacoesDaSemanaAnterior(){
 
-        let xhr = new XMLHttpRequest();
-        xhr.open('GET', 'negociacoes/anterior');
+        return new Promise((resolve, reject) => {
+            let xhr = new XMLHttpRequest();
+            xhr.open('GET', 'negociacoes/anterior');
 
-        xhr.onreadystatechange = () => {
+            xhr.onreadystatechange = () => {
 
-            if (xhr.readyState == 4) {
-                if (xhr.status == 200) {
-                    cb(null, JSON.parse(xhr.responseText)
-                        .map(objeto => new Negociacao(new Date(objeto.data), objeto.quantidade, objeto.valor)));
-                } else {
-                    console.log(xhr.responseText);
-                    cb('Erro ao Importar Negociações', null);
+                if (xhr.readyState == 4) {
+                    if (xhr.status == 200) {
+                        resolve(JSON.parse(xhr.responseText)
+                            .map(objeto => new Negociacao(new Date(objeto.data), objeto.quantidade, objeto.valor)));
+                    } else {
+                        console.log(xhr.responseText);
+                        reject('Erro ao Importar Negociações da semana anterior!');
+                    }
                 }
-            }
-        };
-        xhr.send();
+            };
+            xhr.send();
+        })
     }
 
-    obterNegociacoesDaSemanaRetrasada(cb){
+    obterNegociacoesDaSemanaRetrasada(){
 
-        let xhr = new XMLHttpRequest();
-        xhr.open('GET', 'negociacoes/retrasada');
+        return new Promise((resolve, reject) => {
+            let xhr = new XMLHttpRequest();
+            xhr.open('GET', 'negociacoes/retrasada');
 
-        xhr.onreadystatechange = () => {
+            xhr.onreadystatechange = () => {
 
-            if (xhr.readyState == 4) {
-                if (xhr.status == 200) {
-                    cb(null, JSON.parse(xhr.responseText)
-                        .map(objeto => new Negociacao(new Date(objeto.data), objeto.quantidade, objeto.valor)));
-                } else {
-                    console.log(xhr.responseText);
-                    cb('Erro ao Importar Negociações', null);
+                if (xhr.readyState == 4) {
+                    if (xhr.status == 200) {
+                        resolve(JSON.parse(xhr.responseText)
+                            .map(objeto => new Negociacao(new Date(objeto.data), objeto.quantidade, objeto.valor)));
+                    } else {
+                        console.log(xhr.responseText);
+                        reject('Erro ao Importar Negociações');
+                    }
                 }
-            }
-        };
-        xhr.send();
+            };
+            xhr.send();
+        })
     }
 }
