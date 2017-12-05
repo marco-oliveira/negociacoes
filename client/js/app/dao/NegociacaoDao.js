@@ -32,7 +32,7 @@ class NegociacaoDao{
 
            let cursor = this._connection
                 .transaction([this._store],'readwrite')
-                .objectStore('negociacoes')
+                .objectStore(this._store)
                .openCursor();
 
             let negociacoes = [];
@@ -56,5 +56,22 @@ class NegociacaoDao{
                 reject('Erro ao Listar negociações!');
             };
         });
+    }
+
+    apagaTodos(){
+        return new Promise((resolve, reject) => {
+
+            let request = this._connection
+                .transaction([this._store], 'readwrite')
+                .objectStore(this._store)
+                .clear();
+
+            request.onsuccess = e => resolve('Negociações apagadas com sucesso!');
+
+            request.onerror = e => {
+                console.log(e.target.error);
+                reject('Erro ao tentar apagar negociações!');
+            };
+        })
     }
 }
