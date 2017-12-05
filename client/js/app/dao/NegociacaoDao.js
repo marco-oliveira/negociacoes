@@ -9,7 +9,7 @@ class NegociacaoDao{
         return new Promise((resolve, reject) =>{
 
             let request = this._connection
-                .transaction(this._store, 'readwrite')
+                .transaction([this._store], 'readwrite')
                 .objectStore(this._store)
                 .add(negociacao);
 
@@ -24,5 +24,37 @@ class NegociacaoDao{
 
         })
 
+    }
+
+    listaTodos(){
+
+        return new Promise((resolve, reject) => {
+
+           let cursor = this._connection
+                .transaction([this._store],'readwrite')
+                .objectStore('negociacoes')
+               .openCursor();
+
+            let negociacoes = [];
+
+            cursor.onsuccess = e => {
+                let atual = e.target.result;
+                if (atual){
+
+                    var dado = atual.value;
+
+                    negociacoes.push(new Negociacao(dado._data, dado._quantidade, dado._valor));
+                    atual.continue();
+
+                }else{
+                    resolve(negociacoes);
+                }
+            };
+
+            cursor.onerror = e => {
+                console.log(e.target.error);
+                reject('Erro ao Listar negociações!');
+            };
+        });
     }
 }
