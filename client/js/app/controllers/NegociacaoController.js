@@ -15,12 +15,22 @@ class NegociacaoController{
         this._mensagem = new Bind(new Mensagem(),
                                 new MensagemView($('#mesagemView')),
                                     'texto');
+
+        this._init();
+
+    }
+
+    _init(){
         ConnectionFactory.getConnection()
             .then( connection => new NegociacaoDao(connection))
             .then(dao => dao.listaTodos())
             .then(negociacoes => negociacoes
                 .forEach(negociacao =>
                     this._listaNegociacoes.adiciona(negociacao)));
+
+        setInterval(() => {
+            this.importaNegociacoes();
+        }, 3000);
     }
 
     adiciona(event) {
@@ -45,6 +55,9 @@ class NegociacaoController{
 
         let service = new NegociacaoService();
         service.obterNegociacoes()
+            .then(negociacoes => negociacoes.filter(negociacao =>
+            !this._listaNegociacoes.negociacoes.some(negociacaoExistente =>
+                JSON.stringify(negociacao) == JSON.stringify(negociacaoExistente))))
             .then(negociacoes => {
                 negociacoes.forEach(negociacao => this._listaNegociacoes.adiciona(negociacao));
                 this._mensagem.texto = 'Negociações do período importadas com sucesso';
