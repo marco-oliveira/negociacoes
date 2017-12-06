@@ -1,7 +1,16 @@
+import { Negociacao } from '../models/Negociacao';
+import { Mensagem } from '../models/Mensagem';
+import { ListaNegociacoes } from '../models/ListaNegociacoes';
+import { NegociacaoService } from "../services/NegociacaoService";
+import { NegociacoesView } from "../views/NegociacoesView";
+import { Bind } from "../helpers/Bind";
+import { MensagemView } from "../views/MensagemView";
+import { DateHelper} from "../helpers/DateHelper";
+
 class NegociacaoController{
 
     constructor(){
-        let $ = document.querySelector.bind(document);
+        let  $ = document.querySelector.bind(document);
 
         this._ordemAtual = '';
 
@@ -96,4 +105,12 @@ class NegociacaoController{
         this._inputQuantidade.value = 1;
         this._inputData.focus();
     }
+
+}
+let negociacaoController = new NegociacaoController();
+
+export function currentInstance() {
+
+    return negociacaoController;
+
 }
